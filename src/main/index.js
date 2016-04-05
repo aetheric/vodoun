@@ -1,30 +1,26 @@
 /* global require */
 'use strict';
 
-import scanner from './scanner';
+import Service from './service'
 
 export default class Index {
 
-	constructor(scanBase, glob) {
+	constructor() {
 		this._index = {};
+	}
 
-		scanner(scanBase, {
-
-			[glob]: (fileMatch) => {
-				const module = require(fileMatch);
-				const name = module.name || fileMatch; //TODO: transform filematch to relative with '.' separators.
-				this._index[name] = Promise.resolve(module);
-			}
-
-		});
-
+	/**
+	 * @param {Service} service
+	 */
+	add(service) {
+		this._index[service.name] = service;
 	}
 
 	/**
 	 * @param {String} name
-	 * @returns {Promise<?>}
+	 * @returns {Service}
 	 */
-	resolve(name) {
+	get(name) {
 		return this._index[name];
 	}
 
