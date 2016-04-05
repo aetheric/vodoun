@@ -1,0 +1,3 @@
+# Vodoun
+
+A dependency injection framework for server-side node apps.

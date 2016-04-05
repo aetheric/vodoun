@@ -1,0 +1,27 @@
+{
+  "name": "vodoun",
+  "description": "A dependency injection framework for server-side node apps.",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/aetheric/vodoun.git"
+  },
+  "keywords": [
+    "dependency",
+    "injection",
+    "nodejs"
+  ],
+  "author": "Peter Cummuskey <peterc@aetheric.co.nz>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aetheric/vodoun/issues"
+  },
+  "homepage": "https://github.com/aetheric/vodoun#readme",
+  "dependencies": {
+    "minimatch": "^3.0.0",
+    "underscore": "^1.8.3"
+  }
+}
