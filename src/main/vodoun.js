@@ -3,48 +3,94 @@
 
 import Index from './index'
 import Service from './service'
+import Resolver from './resolver'
 import scanner from './scanner'
 
-let index;
+export default class Vodoun {
 
-/**
- * @callback register~init
- * @this {Object} context
- */
-/**
- * @param {String} name
- * @param {Array<String>|Object<String, String>} dependencies
- * @param {register~init} init
- */
-export const register = (name, dependencies, init) => {
+	/**
+	 * @param {Index} Index
+	 * @param {Service} Service
+	 * @param {Resolver} Resolver
+	 * @param scanner
+	 */
+	constructor(Index, Service, Resolver, scanner) {
 
-	if (!index) {
-		throw new Error("Index has not been initialised yet.");
+		// Save these classes for later use.
+		this.Index = Index;
+		this.Service = Service;
+		this.Resolver = Resolver;
+
+		// Initialise the local necessities.
+		this._scanner = scanner;
+
 	}
 
-	if (index[name]) {
-		throw new Error("Service called ${name} already added to index.")
-	}
+	/**
+	 * @param {String} scanBase
+	 * @param {String} glob
+	 */
+	scan(scanBase, glob) {
 
-	index.add(new Service(name, dependencies, init));
-
-};
-
-export const scan = (scanBase, glob) => {
-
-	if (index) {
-		throw new Error("An index has already been initialised.");
-	}
-
-	index = new Index();
-
-	scanner(scanBase, {
-
-		[glob]: (fileMatch) => {
-			// services should add themselves to the index.
-			const module = require(fileMatch);
+		if (this._index) {
+			throw new Error("An index has already been initialised.");
 		}
 
-	});
+		this._index = new Index();
+		this._resolver = new Resolver(this._index);
+
+		scanner(scanBase, {
+
+			[glob]: (fileMatch) => {
+				// services should add themselves to the index.
+				const module = require(fileMatch);
+			}
+
+		});
+
+	};
+
+	/**
+	 * @callback register~init
+	 * @this {Object} context
+	 */
+	/**
+	 * @param {String} name
+	 * @param {Array<String>|Object<String, String>} dependencies
+	 * @param {register~init} init
+	 */
+	register(name, dependencies, init) {
+
+		if (!this._index) {
+			throw new Error("Index has not been initialised yet.");
+		}
+
+		if (this._index[name]) {
+			throw new Error("Service called ${name} already added to index.")
+		}
+
+		this._index.add(new Service(name, dependencies, init));
+
+	};
+
+	/**
+	 * @param {String} serviceName
+	 */
+	resolve(serviceName) {
+
+		if (!this._index) {
+			throw new Error("Index has not been initialised yet.");
+		}
+
+		const service = this._index.get(serviceName);
+
+		if (!service) {
+			throw new Error("Service has not been added to the index.")
+		}
+
+		return this._resolver.resolve(service);
+
+	}
+
 
 };

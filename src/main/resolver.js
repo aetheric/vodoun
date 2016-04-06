@@ -1,63 +1,74 @@
 /* global */
 'use strict';
 
-import index from './index';
+import Index from './index';
 
-/**
- * Lazily injects promises for the files into code. //TODO: Fuckity fuck-fuck. Remove lazy-loading. Need custom names.
- * @param {Array<String>|Object<String, String>} names
- * @param {Function} callback
- * @param {...*} [args]
- */
-export function inject(names, callback, ...args) {
+export default class Resolver {
 
-	const context = {};
+	/**
+	 * @param {Index} index
+	 */
+	constructor(index) {
+		this._index = index;
+	}
 
-	names.forEach(Array.isArray(names)
-			? (name) => context[name] = index[name] && index[name].promise
-			: (alias, name) => context[alias] = index[name] && index[name].promise);
+	/**
+	 * Lazily injects promises for the files into code. //TODO: Fuckity fuck-fuck. Remove lazy-loading. Need custom names.
+	 * @param {Array<String>|Object<String, String>} names
+	 * @param {Function} callback
+	 * @param {...*} [args]
+	 */
+	inject(names, callback, ...args) {
 
-	const frozen = Object.freeze(context);
+		const context = {};
 
-	return callback.apply(frozen, args);
+		names.forEach(Array.isArray(names)
+				? (name) => context[name] = this._index[name] && this._index[name].promise
+				: (alias, name) => context[alias] = this._index[name] && this._index[name].promise);
 
-}
+		const frozen = Object.freeze(context);
 
-/**
- * @param {Array<String>|Object<String, String>} names
- * @param {Function} [callback]
- * @param {...?} [args]
- * @return Promise|Object<String, ?>
- */
-export function resolve(names, callback, ...args) {
+		return callback.apply(frozen, args);
 
-	const context = {};
-	const promises = [];
+	}
 
-	const getEntry = Array.isArray(names)
-			? (alias, name) => index[alias]
-			: (alias, name) => index[name];
+	/**
+	 * @param {Array<String>|Object<String, String>} names
+	 * @param {Function} [callback]
+	 * @param {...?} [args]
+	 * @return Promise|Object<String, ?>
+	 */
+	resolve(names, callback, ...args) {
 
-	names.forEach((alias, name) => {
+		const context = {};
+		const promises = [];
 
-		const cacheEntry = getEntry(alias, name);
-		if (!cacheEntry) {
-			return;
-		}
+		const getEntry = Array.isArray(names)
+				? (alias, name) => this._index[alias]
+				: (alias, name) => this._index[name];
 
-		const promise = cacheEntry.resolve().then((result) => {
-			context[alias] = result;
+		names.forEach((alias, name) => {
+
+			const cacheEntry = getEntry(alias, name);
+			if (!cacheEntry) {
+				return;
+			}
+
+			const promise = cacheEntry.resolve().then((result) => {
+				context[alias] = result;
+			});
+
+			promises.push(promise);
+
 		});
 
-		promises.push(promise);
+		return Promise.all(promises).then(() => {
+			const frozen = Object.freeze(context);
+			return callback
+					? callback.apply(frozen, args)
+					: frozen;
+		});
 
-	});
-
-	return Promise.all(promises).then(() => {
-		const frozen = Object.freeze(context);
-		return callback
-				? callback.apply(frozen, args)
-				: frozen;
-	});
+	}
 
 }
