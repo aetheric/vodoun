@@ -82,13 +82,7 @@ export default class Vodoun {
 			throw new Error("Index has not been initialised yet.");
 		}
 
-		const service = this._index.get(serviceName);
-
-		if (!service) {
-			throw new Error("Service has not been added to the index.")
-		}
-
-		return this._resolver.resolve(service);
+		return this._index.resolve(serviceName);
 
 	}
 
