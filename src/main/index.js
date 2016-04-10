@@ -27,6 +27,8 @@ export default class Index {
 
 		this._index[name] = new Service(name, dependencies, init);
 
+		console.log(`Initialised ${name}.`)
+
 	};
 
 	/**
