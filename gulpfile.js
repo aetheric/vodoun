@@ -14,6 +14,12 @@ var gulpMocha = require('gulp-mocha');
 var gulpIstanbul = require('gulp-istanbul');
 var istanbulTraceur = require('istanbul-traceur');
 
+gulp.task('build', function (done) {
+
+	gulpUtil.log('This project doesn\'t need to be compiled');
+	done();
+
+});
 
 gulp.task('test', function (done) {
 
@@ -57,3 +63,16 @@ gulp.task('test', function (done) {
 			});
 
 });
+
+gulp.task('docs', function (done) {
+
+	gulpUtil.log('This project doesn\'t have any docs to compile yet.');
+	done();
+
+});
+
+gulp.task('default', [
+	'build',
+	'test',
+	'docs'
+]);
