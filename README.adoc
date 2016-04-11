@@ -1,5 +1,9 @@
 = Vodoun
 
+image:https://travis-ci.org/aetheric/vodoun.svg?branch=master["Build Status", link="https://travis-ci.org/aetheric/vodoun"]
+image:https://coveralls.io/repos/github/aetheric/vodoun/badge.svg?branch=master["Coverage Status", link="https://coveralls.io/github/aetheric/vodoun"]
+image:https://badge.fury.io/js/vodoun.svg["npm version", link="https://badge.fury.io/js/vodoun"]
+
 A dependency injection framework for server-side node apps.
 
 == Installation
