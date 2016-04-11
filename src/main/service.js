@@ -10,7 +10,7 @@ import _ from 'underscore';
 function toMap(array) {
 	return _.reduce(array, (map, item) => {
 		map[item] = item;
-		return item;
+		return map;
 	}, {});
 }
 

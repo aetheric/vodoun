@@ -47,6 +47,10 @@ gulp.task('test', function (done) {
 							}
 						}))
 
+						.on('error', function (error) {
+							gulpUtil.log(error);
+						})
+
 						.pipe(gulpIstanbul.writeReports({
 							dir: 'target/coverage',
 							reporters: [
