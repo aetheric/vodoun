@@ -3,7 +3,6 @@
 
 import Index from './index'
 import Service from './service'
-import Resolver from './resolver'
 import scanner from './scanner'
 
 export default class Vodoun {

@@ -24,7 +24,7 @@ describe('The Service class', function () {
 	it("will behave in an expectable manner when provided with unremarkable values", () => {
 
 		serviceName = "serviceName";
-		serviceDeps = [];
+		serviceDeps = {};
 		serviceInit = function (service) {
 			expect(service).not.to.be.null;
 		};
@@ -34,6 +34,7 @@ describe('The Service class', function () {
 		expect(service.name).to.equal(serviceName);
 		expect(service.init).to.equal(serviceInit);
 		expect(service.dependencies).to.equal(serviceDeps);
+
 	});
 
 });

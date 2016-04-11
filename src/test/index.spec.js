@@ -3,7 +3,7 @@
 
 import Index from '../main/index';
 
-describe('The scanner routine', function() {
+describe('The index', function() {
 
 	var index;
 
