@@ -38,7 +38,7 @@ deploy:
   provider: npm
   email: peterc@aetheric.co.nz
   skip_cleanup: true
-  key:
+  api_key:
     secure: jXNKNSEAiB30nAaBS8m/jQf4/OKdpcxcfZh/HGj4LG4/BmhuSo5GCkLQO3irbjxt1N2/GQByo31+Xu9pkXN5/wOQznt6boX+i4yJC8xzpUn+75HEj/bgeHeCVNgzPSIYEfD+1t+HrZItOTqp7I0NEgk4KirlgnvOZqEe3GKOTzOjBCIBSEAm3ShMRRmOt5BHuGnZg3u84AswOkKKXiDmW/9BA2D7VNvqrKK+GMaFxsOSuKCDBySghgw+nxDyDgGAoIvRk7Bb06U5KqYKwmCyTZE2M8BsyuH+yJrzEkYvm1gF6nA8HHcSIVDUhn1STdIbJCJG+hZFA2nfVdPUf8t652fKRcLdi2DVlKYWhitwouq9PiiRYwNXzCoK2Kq4aqTx5ODB4MpwzJa3qvkhV/S/WnkyFS/Nn8qtBEpo5sITJmk9FUAmjvpVGkPk0znsQLnTihvaGe/j7lNu2qJ33SPUAqSHwIRCXGENFXyhFIsbVmP3/ep7HIlMdmztmKsOSxgCiV28kbDvlE/OQ2hpgVUCx9B7kRkpx8FLGD/oHOdd9KOHIOCMNUjaDbEEbjgjEihq9lIxhWM/TMbwk8eD95iBLmt6dsMpzUp4kt9UvKC9KXfnePZHjNmWeOQDv/NGdhF56lRA7dUxEwj/C72gxAgx8ZzJdQ9gmhbgE5OHia4K6mg=
   on:
     repo: aetheric/vodoun
