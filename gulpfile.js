@@ -12,6 +12,7 @@ var gulp = require('gulp');
 var gulpUtil = require('gulp-util');
 var gulpMocha = require('gulp-mocha');
 var gulpIstanbul = require('gulp-istanbul');
+var gulpCoveralls = require('gulp-coveralls');
 var istanbulTraceur = require('istanbul-traceur');
 
 gulp.task('build', function (done) {
@@ -54,10 +55,20 @@ gulp.task('test', function (done) {
 							]
 						}))
 
-						// .on('error', gulpUtil.log)
-
 						.once('end', function (error) {
-							done(error);
+
+							error && done(error);
+
+							gulp.src('target/coverage/**/lcov.info')
+
+									.pipe(gulpCoveralls())
+
+									.once('end', function (error) {
+
+										done(error);
+
+									});
+
 						});
 
 			});
