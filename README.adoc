@@ -1,3 +1,86 @@
-# Vodoun
+= Vodoun
 
 A dependency injection framework for server-side node apps.
+
+== Installation
+
+`npm install vodoun --save`
+
+== Usage
+
+.src/main/service/service-a.js
+[source,javascript]
+----
+import vodoun from 'vodoun';
+
+vodoun.register('service_a', [], (service) => {
+
+	let stateChanged = false;
+
+	service.blergh = () => {
+		console.log('BLERGH!!!');
+		stateChanged = true;
+	});
+
+});
+----
+
+.src/main/service/service-b.js
+[source,javascript]
+----
+import vodoun from 'vodoun';
+import dbLib from 'db-lib';
+
+vodoun.register('service_b', [ 'service_a' ], (service) => {
+
+	const serviceA = this.service_a;
+
+	return dbLib.connect('prot://localhost:8260/dbname').then((conn) => {
+
+		service.query = (query, params) => conn.query(query, params);
+
+		service.close = () => conn.close().then(serviceA.blergh);
+
+	});
+
+});
+----
+
+.src/main/service/service-c.js
+[source,javascript]
+----
+import vodoun from 'vodoun';
+
+vodoun.register('service_c', {
+	bloopyWibble: 'service_a',
+	wibbledyBloob: 'service_b'
+
+}, (service) => {
+
+	const serviceA = this.bloopyWibble;
+	const serviceB = this.wibbledyBloop;
+
+	service.argh = (query, params) => {
+		serviceA.blergh();
+		return serviceB.query(query, params).then((result) => serviceB.close());
+	});
+
+});
+----
+
+.src/main/index.js
+[source,javascript]
+----
+import vodoun from 'vodoun';
+
+vodoun.scan('src/main', '**/*.js').then((files) => {
+	console.log(`Vodoun scan complete. ${files.length} files loaded.`);
+	return vodoun.resolve('service_c');
+
+}).then((serviceC) => {
+	return serviceC.argh('get stuff from somewhere when something = :param', {
+		param: 'value'
+	});
+
+});
+----
