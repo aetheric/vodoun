@@ -3,42 +3,49 @@
 
 import Index from './index'
 import Service from './service'
-import scanner from './scanner'
+import Scanner from './scanner'
+import Files from './wrapper/files';
+import Match from './wrapper/match';
 
 export default class Vodoun {
 
 	/**
-	 * @param {Index} Index
-	 * @param {Service} Service
-	 * @param {Resolver} Resolver
-	 * @param scanner
+	 * @param {Index} [indexType]
+	 * @param {Service} [serviceType]
+	 * @param {Scanner} [scannerType]
+	 * @param {Match} [matchType]
+	 * @param {Files} [filesType]
 	 */
-	constructor(Index, Service, Resolver, scanner) {
+	constructor(indexType = Index, serviceType = Service, scannerType = Scanner, filesType = Files, matchType = Match) {
 
 		// Save these classes for later use.
-		this.Index = Index;
-		this.Service = Service;
-		this.Resolver = Resolver;
-
-		// Initialise the local necessities.
-		this._scanner = scanner;
+		this.Index = indexType;
+		this.Service = serviceType;
+		this.Scanner = scannerType;
+		this.Match = matchType;
+		this.Files = filesType;
 
 	}
 
 	/**
 	 * @param {String} scanBase
-	 * @param {String} glob
+	 * @param {String} [glob]
+	 * @return {Promise}
 	 */
-	scan(scanBase, glob) {
+	scan(scanBase, glob = '**/*.js') {
 
-		if (this._index) {
-			throw new Error("An index has already been initialised.");
+		if (!scanBase) {
+			return Promise.reject(new Error('A scan base is required.'));
 		}
 
-		this._index = new Index();
-		this._resolver = new Resolver(this._index);
+		if (this._index) {
+			return Promise.reject(new Error("An index has already been initialised."));
+		}
 
-		scanner(scanBase, {
+		this._index = new this.Index();
+		const scanner = new this.Scanner(this.Files, this.Match);
+
+		return scanner.scan(scanBase, {
 
 			[glob]: (fileMatch) => {
 				// services should add themselves to the index.
@@ -68,17 +75,22 @@ export default class Vodoun {
 			throw new Error("Service called ${name} already added to index.")
 		}
 
-		this._index.add(new Service(name, dependencies, init));
+		this._index.add(new this.Service(name, dependencies, init));
 
 	};
 
 	/**
 	 * @param {String} serviceName
+	 * @return {Promise<Object>}
 	 */
 	resolve(serviceName) {
 
+		if (!serviceName) {
+			return Promise.reject(new Error('A service name is required.'));
+		}
+
 		if (!this._index) {
-			throw new Error("Index has not been initialised yet.");
+			return Promise.reject(new Error("Index has not been initialised yet."));
 		}
 
 		return this._index.resolve(serviceName);

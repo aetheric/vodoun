@@ -9,7 +9,7 @@ import './setup';
 
 const expect = chai.expect;
 
-describe('The index', () => {
+describe('The Index class', () => {
 
 	var index;
 
