@@ -25,7 +25,7 @@ export default class Service extends ServiceType {
 	 * @constructor
 	 * @param {String} name
 	 * @param {Array<String>|Object<String, String>} dependencies
-	 * @param {IndexType#register~init} init
+	 * @param {ServiceType.init} init
 	 */
 	constructor(name, dependencies, init) {
 		super();

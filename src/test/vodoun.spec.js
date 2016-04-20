@@ -85,11 +85,8 @@ describe('The Vodoun class', () => {
 		});
 
 		vodoun = new Vodoun(
-				mockIndexConstructor,
-				mockServiceConstructor,
-				mockScannerConstructor,
-				mockFilesConstructor,
-				mockMatchConstructor);
+				mockIndex,
+				mockScanner);
 	});
 
 	afterEach(() => {

@@ -17,7 +17,7 @@ describe('The Service class', function () {
 	/** @type {String} */
 	var serviceName;
 
-	/** @type {Function} */
+	/** @type {ServiceType.init} */
 	var serviceInit;
 
 	/** @type {Array|Object<String, String>} */
