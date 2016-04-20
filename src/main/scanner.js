@@ -1,11 +1,12 @@
-/* global */
+/* global console */
 'use strict';
 
 import _ from 'underscore';
 import paths from 'path';
-
-import Files from './wrapper/files';
-import Match from './wrapper/match';
+import ScannerType from './interfaces/type-scanner';
+import './interfaces/type-files-stat';
+import './interfaces/type-matchers';
+import './interfaces/type-files';
 
 /**
  * @template Key, Value, NewKey
@@ -37,7 +38,7 @@ function mapObjectKeys(object, mapper, context) {
  * @callback MatchReducerCallback
  * @param {Boolean} hasMatch
  * @param {OnMatchCallback} onMatch
- * @param {Minimatch} glob
+ * @param {MatchersType.MatcherType} glob
  * @returns {Array<String>}
  */
 /**
@@ -48,7 +49,7 @@ function mapObjectKeys(object, mapper, context) {
 function MatchReducer(path) {
 	return (hasMatch, onMatch, glob) => {
 
-		const matches = glob.match(path);
+		const matches = glob.matches(path);
 		onMatch.call(undefined, path);
 
 		return hasMatch || matches;
@@ -56,28 +57,27 @@ function MatchReducer(path) {
 	};
 }
 
-export default class Scanner {
+/**
+ * @class Scanner
+ * @implements ScannerType
+ */
+export default class Scanner extends ScannerType {
 
 	/**
-	 * @param {Files} filesType
-	 * @param {Match} matchType
+	 * @constructor
+	 * @param {FilesType} files
+	 * @param {MatchersType} matcher
 	 */
-	constructor(filesType, matchType = Match) {
+	constructor(files, matcher) {
+		super();
 
-		this.Files = filesType;
-		this.Match = matchType;
+		this._files = files;
+		this._matcher = matcher;
 
 	}
 
-	/**
-	 * This should be invoked during server startup.
-	 * @param {String} path
-	 * @param {Object<String|Match, Function>} matchActions
-	 * @return {Promise<Array<String>>}
-	 */
+	/** @inheritDoc */
 	scan(path, matchActions) {
-
-		throw new Error();
 
 		if (!path) {
 			return Promise.reject(new Error('A base search path is required.'));
@@ -94,12 +94,12 @@ export default class Scanner {
 				.value();
 
 		if (firstAction && _.isString(firstAction)) {
-			const globTransform = (globString) => new this.Match(globString);
+			const globTransform = (globString) => this._matcher.matcher(globString);
 			const newActions = mapObjectKeys(matchActions, globTransform, {});
 			return this.scan(path, newActions);
 		}
 
-		return this.Files.stat(path).then((stats) => {
+		return this._files.stat(path).then((stats) => {
 
 			// add them to the index, but don't load them.
 			if (stats.isFile()) {
@@ -122,7 +122,7 @@ export default class Scanner {
 
 			// recursively scan a directory for files.
 			console.warn(`Directory encountered while stat-ing ${path}`);
-			return this.Files.readdir(path).then((files) => {
+			return this._files.readdir(path).then((files) => {
 
 				const results = _.map(files, (file) => {
 					const subPath = paths.resolve(path, file);

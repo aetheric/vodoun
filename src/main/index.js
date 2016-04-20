@@ -1,42 +1,42 @@
-/* global require */
+/* global console */
 'use strict';
 
 import _ from 'underscore';
+import IndexType from './interfaces/type-index';
+import './interfaces/type-service';
 
-import Service from './service'
+/**
+ * @class Index
+ * @implements IndexType
+ */
+export default class Index extends IndexType {
 
-export default class Index {
+	/**
+	 * @constructor
+	 * @param {ServiceType} Service
+	 */
+	constructor(Service) {
+		super();
 
-	constructor() {
+		this.Service = Service;
+
 		this._index = {};
 		this._cache = {};
+
 	}
 
-	/**
-	 * @callback register~init
-	 * @this {Object} context
-	 */
-	/**
-	 * @param {String} name
-	 * @param {Array<String>|Object<String, String>} dependencies
-	 * @param {register~init} init
-	 */
 	register(name, dependencies, init) {
 
 		if (this._index[name]) {
-			throw new Error(`Service called ${name} already added to index.`)
+			console.warn(`Overriding service ${name}...`);
 		}
 
-		this._index[name] = new Service(name, dependencies, init);
+		this._index[name] = new this.Service(name, dependencies, init);
 
-		console.log(`Initialised ${name}.`);
+		console.log(`Registered ${name}.`);
 
 	};
 
-	/**
-	 * @param {String} name
-	 * @returns {Promise<Object<String, Function>>}
-	 */
 	resolve(name) {
 		return new Promise((resolve, reject) => {
 

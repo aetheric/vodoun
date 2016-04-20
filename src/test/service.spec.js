@@ -5,6 +5,8 @@ import chai from 'chai';
 
 import Service from '../main/service';
 
+import './util/setup';
+
 const expect = chai.expect;
 
 describe('The Service class', function () {

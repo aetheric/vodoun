@@ -1,7 +1,8 @@
-/* global */
+/* global console */
 'use strict';
 
 import _ from 'underscore';
+import ServiceType from './interfaces/type-service';
 
 /**
  * @param {Array<String>} array
@@ -14,42 +15,40 @@ function toMap(array) {
 	}, {});
 }
 
-export default class Service {
+/**
+ * @class Service
+ * @implements ServiceType
+ */
+export default class Service extends ServiceType {
 
 	/**
-	 * @callback constructor~init
-	 * @this {Object} context
-	 */
-	/**
+	 * @constructor
 	 * @param {String} name
 	 * @param {Array<String>|Object<String, String>} dependencies
-	 * @param {constructor~init} init
+	 * @param {IndexType#register~init} init
 	 */
 	constructor(name, dependencies, init) {
+		super();
+
 		this._name = name;
 		this._init = init;
 		this._dependencies = _.isArray(dependencies)
 				? toMap(dependencies)
 				: dependencies;
+
 	}
 
-	/**
-	 * @returns {String}
-	 */
+	/** @inheritDoc */
 	get name() {
 		return this._name;
 	}
 
-	/**
-	 * @returns {constructor~init}
-	 */
+	/** @inheritDoc */
 	get init() {
 		return this._init;
 	}
 
-	/**
-	 * @returns {Object<String, String>}
-	 */
+	/** @inheritDoc */
 	get dependencies() {
 		return this._dependencies;
 	}

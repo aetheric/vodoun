@@ -6,10 +6,12 @@ import chai from 'chai';
 import Mockito from 'jsmockito';
 import Hamcrest from 'jshamcrest';
 
-import ArgumentCaptor from './ArgumentCaptor';
+import ArgumentCaptor from './util/ArgumentCaptor';
 import Scanner from '../main/scanner';
-import Files from '../main/wrapper/files';
-import minimatch from '../main/wrapper/match';
+import FilesType from '../main/interfaces/type-files';
+import MatchersType from '../main/interfaces/type-matchers';
+
+import './util/setup';
 
 const expect = chai.expect;
 const mockito = Mockito.JsMockito;
@@ -24,8 +26,11 @@ describe('The Scanner class', () => {
 		const scanBase = '.';
 		const error = new Error('expected');
 
-		const filesMock = mockito.mock(Files);
-		const minimatchMock = mockito.mockFunction(minimatch);
+		/** @type FilesType */
+		const filesMock = mockito.mock(FilesType);
+
+		/** @type MatchersType */
+		const matchersMock = mockito.mock(MatchersType);
 
 		const pathCaptor = new ArgumentCaptor(matchers.string());
 		const callbackCaptor = new ArgumentCaptor(matchers.func());
@@ -35,7 +40,7 @@ describe('The Scanner class', () => {
 			callbackCaptor.value.call(undefined, error, null);
 		});
 
-		const scanner = new Scanner(filesMock, minimatchMock);
+		const scanner = new Scanner(filesMock, matchersMock);
 		const result = scanner.scan(scanBase, {});
 
 		return expect(result).to.be.rejectedWith(error);

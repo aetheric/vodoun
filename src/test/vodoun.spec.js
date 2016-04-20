@@ -1,14 +1,15 @@
 /* global describe, beforeEach, afterEach, it */
 'use strict';
 
+import _ from 'underscore';
 import chai from 'chai';
 import Mockito from 'jsmockito';
 import Hamcrest from 'jshamcrest';
 
-import ArgumentCaptor from './ArgumentCaptor';
+import ArgumentCaptor from './util/ArgumentCaptor';
 import Vodoun from '../main/vodoun';
 
-import './setup';
+import './util/setup';
 
 global.JsHamcrest = Hamcrest.JsHamcrest;
 
@@ -71,7 +72,12 @@ describe('The Vodoun class', () => {
 			return mockFiles;
 		});
 
-		mockMatch = mockito.mock(() => {});
+		mockMatch = mockito.mock(function () {
+			this.matches = () => {
+				console.error('Unstubbed Match#matches called!');
+				return Promise.reject(new Error('unstubbed'));
+			}
+		});
 
 		mockMatchConstructor = mockito.mockFunction('Match#constructor', () => {
 			console.log('Match#constructor called!');
@@ -110,8 +116,8 @@ describe('The Vodoun class', () => {
 
 			expect(vodoun.scan).to.be.a('function');
 
-			matchActionsCaptor = new ArgumentCaptor(Matchers.anything());
-			mockito.when(mockScanner).scan(Matchers.anything(), matchActionsCaptor).then((path, actions) => {
+			matchActionsCaptor = new ArgumentCaptor(Matchers.object());
+			mockito.when(mockScanner).scan(Matchers.string(), matchActionsCaptor).then((path, actions) => {
 				console.log(`Scanner#scan called for ${path} with ${JSON.stringify(_.keys(actions))}`);
 				return Promise.resolve();
 			});
@@ -140,7 +146,7 @@ describe('The Vodoun class', () => {
 
 		});
 
-		it('that when called before the index is initialised', () => {
+		it('that when called before the index is initialised, sets up the index', () => {
 
 			scanBase = '.';
 			glob = '**';

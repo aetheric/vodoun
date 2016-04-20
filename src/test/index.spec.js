@@ -1,45 +1,130 @@
-/* global describe, beforeEach, it */
+/* global describe, it, beforeEach, afterEach, console */
 'use strict';
 
 import chai from 'chai';
-
+import Mockito from 'jsmockito';
+import Hamcrest from 'jshamcrest';
+import ArgumentCaptor from './util/ArgumentCaptor';
 import Index from '../main/index';
-
-import './setup';
+import ServiceType from '../main/interfaces/type-service';
+import './util/setup';
 
 const expect = chai.expect;
+const mockito = Mockito.JsMockito;
+const verifiers = mockito.Verifiers;
+const matchers = Hamcrest.JsHamcrest.Matchers;
 
 describe('The Index class', () => {
 
-	var index;
+	let index;
+
+	let mockServiceTypeConstructor;
 
 	beforeEach(() => {
-		index = new Index();
+
+		mockServiceTypeConstructor = mockito.mockFunction(ServiceType, () => {
+			console.info('ServiceType#constructor called!');
+		});
+
+		index = new Index(mockServiceTypeConstructor);
+
+	});
+
+	afterEach(() => {
+		mockito.verifyNoMoreInteractions(mockServiceTypeConstructor);
 	});
 
 	it('should allow registering services', () => {
-		return index.register('service', [], () => {});
+
+		const serviceName = 'service';
+		const dependencies = [];
+		const init = () => {};
+
+		const result = index.register(serviceName, dependencies, init);
+
+		expect(result).to.be.undefined;
+
+		mockito.verify(mockServiceTypeConstructor, verifiers.once())(serviceName, dependencies, init);
+
 	});
 
-	it('should throw an error if a service is added twice', () => {
-		index.register('service', [], () => {});
-		return expect(() => index.register('service', [], () => {})).to.throw(Error);
+	it('should override the previous registration if a service is added twice', () => {
+
+		const serviceName = 'service';
+		const initA = () => { };
+		const initB = () => { };
+
+		const initCaptor = new ArgumentCaptor(matchers.func());
+		mockito.when(mockServiceTypeConstructor)(serviceName, matchers.anything(), initCaptor);
+
+		index.register(serviceName, [], initA);
+		index.register(serviceName, [], initB);
+
+		mockito.verify(mockServiceTypeConstructor, verifiers.times(2))(serviceName, matchers.anything(), initCaptor);
+		expect(initCaptor.value).to.equal(initB);
+
 	});
 
 	it('should retrieve a known service without problems', () => {
-		index.register('service', [], () => {});
-		return expect(index.resolve('service')).to.be.fulfilled;
+
+		const serviceName = 'service';
+		const init = (context) => {
+			context.verified = true;
+		};
+
+		index.register(serviceName, [], init);
+
+		const result = index.resolve('service');
+
+		expect(result).to.be.a('Promise');
+
+		return expect(result).to.be.fulfilled.then((service) => {
+
+			expect(service.verified).to.equal(true);
+
+			mockito.verify(mockServiceTypeConstructor, verifiers.once());
+
+		});
+
 	});
 
 	it('should throw an error if dependencies can\'t be met.', () => {
-		index.register('badservice', [ 'missingdep' ], () => {});
-		return expect(index.resolve('badservice')).to.be.rejectedWith(Error);
+
+		const serviceName = 'badservice';
+
+		index.register(serviceName, [ 'missingdep' ], () => {});
+
+		const result = index.resolve(serviceName);
+
+		return expect(result).to.be.rejectedWith(Error).then(() => {
+
+			mockito.verify(mockServiceTypeConstructor, verifiers.once());
+
+		});
+
 	});
 
-	it('should resolve dependencies', () => {
-		index.register('otherservice', [], () => {});
-		index.register('service', [ 'otherservice' ], () => {});
-		return expect(index.resolve('service')).to.be.fulfilled;
+	it('should resolve dependencies registered in any order', () => {
+
+		const serviceNameA = 'service';
+		const serviceNameB = 'otherservice';
+
+		index.register(serviceNameA, [ serviceNameB ], function () {
+			expect(this[serviceNameB].verified).to.equal(true);
+		});
+
+		index.register(serviceNameB, [], (service) => {
+			service.verified = true;
+		});
+
+		const result = index.resolve('service');
+
+		return expect(result).to.be.fulfilled.then(() => {
+
+			mockito.verify(mockServiceTypeConstructor, verifiers.once());
+
+		});
+
 	});
 
 });
