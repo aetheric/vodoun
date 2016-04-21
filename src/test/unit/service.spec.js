@@ -3,9 +3,8 @@
 
 import chai from 'chai';
 
-import Service from '../main/service';
-
-import './util/setup';
+import Service from '../../main/service';
+import './_setup';
 
 const expect = chai.expect;
 

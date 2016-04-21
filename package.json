@@ -21,13 +21,13 @@
   },
   "homepage": "https://github.com/aetheric/vodoun#readme",
   "dependencies": {
-    "es6-denodeify": "^0.1.5",
     "minimatch": "^3.0.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
+    "fs-extra-promise-es6": "^0.1.1",
     "gulp": "^3.9.1",
     "gulp-coveralls": "^0.1.4",
     "gulp-istanbul": "^0.10.4",
@@ -37,6 +37,7 @@
     "jshamcrest": "^0.7.0",
     "jsmockito": "github:neben/jsmockito",
     "mocha-traceur": "^2.1.0",
+    "mock-require": "^1.2.1",
     "traceur": "0.0.107",
     "traceur-source-maps": "^1.0.6"
   }

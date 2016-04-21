@@ -6,10 +6,9 @@ import chai from 'chai';
 import Mockito from 'jsmockito';
 import Hamcrest from 'jshamcrest';
 
-import ArgumentCaptor from './util/ArgumentCaptor';
-import Vodoun from '../main/vodoun';
-
-import './util/setup';
+import ArgumentCaptor from '../ArgumentCaptor';
+import Vodoun from '../../main/vodoun';
+import './_setup';
 
 global.JsHamcrest = Hamcrest.JsHamcrest;
 

@@ -20,11 +20,7 @@
  */
 import files from 'fs';
 
-import Denodeify from 'es6-denodeify';
 import FilesType from '../interfaces/type-files';
-
-const denodeify = new Denodeify(Promise);
-
 
 /**
  * @class FilesWrapper
@@ -38,8 +34,30 @@ export default class FilesWrapper extends FilesType {
 	constructor() {
 		super();
 
-		this._stat = denodeify(files.stat);
-		this._readdir = denodeify(files.readdir);
+		this._stat = (path) => new Promise((resolve, reject) => {
+			files.stat(path, (error, stat) => {
+
+				if (error) {
+					return reject(error);
+				}
+
+				return resolve(stat);
+
+			});
+		});
+
+
+		this._readdir = (path) => new Promise((resolve, reject) => {
+			files.readdir(path, (error, paths) => {
+
+				if (error) {
+					return reject(error);
+				}
+
+				return resolve(paths);
+
+			});
+		});
 
 	}
 

@@ -6,12 +6,11 @@ import chai from 'chai';
 import Mockito from 'jsmockito';
 import Hamcrest from 'jshamcrest';
 
-import ArgumentCaptor from './util/ArgumentCaptor';
-import Scanner from '../main/scanner';
-import FilesType from '../main/interfaces/type-files';
-import MatchersType from '../main/interfaces/type-matchers';
-
-import './util/setup';
+import ArgumentCaptor from '../ArgumentCaptor';
+import Scanner from '../../main/scanner';
+import FilesType from '../../main/interfaces/type-files';
+import MatchersType from '../../main/interfaces/type-matchers';
+import './_setup';
 
 const expect = chai.expect;
 const mockito = Mockito.JsMockito;

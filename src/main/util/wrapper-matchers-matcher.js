@@ -19,7 +19,10 @@ export default class MatchersMatcherWrapper extends MatcherType {
 	 * @param {Minimatch} matcher An instantiated Minimatch object.
 	 */
 	constructor(matcher) {
+		super();
+
 		this.matcher = matcher;
+
 	}
 
 	/** @inheritDoc */

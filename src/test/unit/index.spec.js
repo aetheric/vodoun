@@ -4,10 +4,10 @@
 import chai from 'chai';
 import Mockito from 'jsmockito';
 import Hamcrest from 'jshamcrest';
-import ArgumentCaptor from './util/ArgumentCaptor';
-import Index from '../main/index';
-import ServiceType from '../main/interfaces/type-service';
-import './util/setup';
+import ArgumentCaptor from '../ArgumentCaptor';
+import Index from '../../main/index';
+import ServiceType from '../../main/interfaces/type-service';
+import './_setup';
 
 const expect = chai.expect;
 const mockito = Mockito.JsMockito;
