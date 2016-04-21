@@ -51,6 +51,8 @@ gulp.task('test', function (done) {
 							gulpUtil.log(error);
 						})
 
+						.pipe(gulp.dest('target/testing'))
+
 						.pipe(gulpIstanbul.writeReports({
 							dir: 'target/coverage',
 							reporters: [
