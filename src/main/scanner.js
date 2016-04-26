@@ -9,25 +9,30 @@ import './interfaces/type-matchers';
 import './interfaces/type-files';
 
 /**
- * @template Key, Value, NewKey
- * @callback mapObjectKeys~mapper<Key, Value, NewKey>
+ * @template Key, Value, NewKey, Context
+ * @callback mapObjectKeys~mapper<Key, Value, NewKey, Context>
+ * @this {Context}
  * @param {Key} key
  * @param {Value} value
+ * @param {Context} [context]
  * @return {NewKey}
  */
 /**
- * @template Key, Value, NewKey
+ * @template Key, Value, NewKey, Context
  * @param {Object<Key, Value>} object
- * @param {mapObjectKeys~mapper<Key, Value, NewKey>} mapper
- * @param {Object} [context]
- * @returns {Object<NewKey, Value>}
+ * @param {mapObjectKeys~mapper<Key, Value, NewKey, Context>} mapper
+ * @param {Context} [context]
+ * @returns {Map<NewKey, Value>}
  */
-function mapObjectKeys(object, mapper, context) {
-	return _.chain(object) // start the chain.
-			.invert() // swap keys and values.
-			.mapObject(mapper, context) // do the transform
-			.invert() // swap things back
-			.value(); // extract the result from the chain.
+function mapObjectKeys(object, mapper, context = {}) {
+	return _.reduce(object, (map, value, key) => {
+
+		// Generate the new key by invoking the mapper function.
+		const newKey = mapper.call(context, key, value, context);
+		map[newKey] = value;
+		return map;
+
+	}, new Map());
 }
 
 /**
@@ -37,8 +42,8 @@ function mapObjectKeys(object, mapper, context) {
 /**
  * @callback MatchReducerCallback
  * @param {Boolean} hasMatch
- * @param {OnMatchCallback} onMatch
- * @param {MatchersType.MatcherType} glob
+ * @param {Object<String, OnMatchCallback|MatcherType>} matchAction
+ * @param {String} globString
  * @returns {Array<String>}
  */
 /**
@@ -47,10 +52,10 @@ function mapObjectKeys(object, mapper, context) {
  * @constructor
  */
 function MatchReducer(path) {
-	return (hasMatch, onMatch, glob) => {
+	return (hasMatch, matchAction, globString) => {
 
-		const matches = glob.matches(path);
-		onMatch.call(undefined, path);
+		const matches = matchAction.matcher.matches(path);
+		matchAction.action.call(undefined, path);
 
 		return hasMatch || matches;
 
@@ -88,15 +93,15 @@ export default class Scanner extends ScannerType {
 		}
 
 		// Get the first stored key.
-		const firstAction = _.chain(matchActions)
-				.keys()
-				.first()
-				.value();
+		const firstAction = _.chain(matchActions).values().first().value();
 
-		if (firstAction && _.isString(firstAction)) {
-			const globTransform = (globString) => this._matcher.matcher(globString);
-			const newActions = mapObjectKeys(matchActions, globTransform, {});
-			return this.scan(path, newActions);
+		if (firstAction && _.isFunction(firstAction)) {
+			return this.scan(path, _.mapObject(matchActions, (matchAction, globString) => {
+				return {
+					action: matchAction,
+					matcher: this._matcher.matcher(globString)
+				};
+			}));
 		}
 
 		return this._files.stat(path).then((stats) => {

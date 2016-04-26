@@ -20,10 +20,11 @@ export default class IndexType {
 
 	/**
 	 * @function
-	 * @param {String} name
+	 * @param {String} name The registered name of the service to resolve.
+	 * @param {Array<String>} [history] Used to detect cyclical dependencies during recursion.
 	 * @returns {Promise<Object<String, ?>>}
 	 */
-	resolve(name) {
+	resolve(name, history) {
 		throw new Error('Not implemented!');
 	}
 

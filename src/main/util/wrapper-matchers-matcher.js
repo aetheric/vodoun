@@ -27,7 +27,7 @@ export default class MatchersMatcherWrapper extends MatcherType {
 
 	/** @inheritDoc */
 	matches(path) {
-		return this.matcher.match(input);
+		return this.matcher.match(path);
 	}
 
 }

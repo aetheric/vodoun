@@ -25,6 +25,7 @@ export default class Index extends IndexType {
 
 	}
 
+	/** @inheritDoc */
 	register(name, dependencies, init) {
 
 		if (this._index[name]) {
@@ -37,10 +38,15 @@ export default class Index extends IndexType {
 
 	};
 
-	resolve(name) {
+	/** @inheritDoc */
+	resolve(name, history = []) {
 		return new Promise((resolve, reject) => {
 
 			console.log(`Attempting to resolve service ${name}`);
+
+			if (_.contains(history, name)) {
+				return reject(new Error(`No cyclical dependencies! Attempted ${JSON.stringify(history)} + ${name}`));
+			}
 
 			// If the service has been previously loaded, no need to do it again.
 			const cached = this._cache[name];
@@ -58,9 +64,9 @@ export default class Index extends IndexType {
 
 			/** @type {Object<String, String>} */
 			const dependencies = entry.dependencies || {};
-			const promises = _.map(dependencies, (name, alias) => {
-				console.log(`=> Attempting to resolve dependency ${name}`);
-				return this.resolve(name).then((resolved) => {
+			const promises = _.map(dependencies, (alias, serviceId) => {
+				console.log(`=> Attempting to resolve dependency ${serviceId}`);
+				return this.resolve(serviceId, _.union(history, [ name ])).then((resolved) => {
 					context[alias] = resolved;
 				});
 			});

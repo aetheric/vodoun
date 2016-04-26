@@ -8,10 +8,10 @@ export default class ScannerType {
 
 	/**
 	 * This should be invoked during server startup.
-	 * 
+	 *
 	 * @function
 	 * @param {String} path
-	 * @param {Object<String|MatchersType, Function>} matchActions
+	 * @param {Map<String, Function|Object<String, Function|MatcherType>>} matchActions
 	 * @return {Promise<Array<String>>}
 	 */
 	scan(path, matchActions) {
