@@ -1,4 +1,4 @@
-/* global */
+/* global require, module */
 'use strict';
 
 /**
@@ -18,15 +18,15 @@
 /**
  * @type FilesLib
  */
-import files from 'fs';
+const files = require('fs');
 
-import FilesType from '../interfaces/type-files';
+const FilesType = require('../interfaces/type-files');
 
 /**
  * @class FilesWrapper
  * @implements FilesType
  */
-export default class FilesWrapper extends FilesType {
+module.exports = class FilesWrapper extends FilesType {
 
 	/**
 	 * @constructor

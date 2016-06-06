@@ -1,7 +1,7 @@
-/* global */
+/* global require, module */
 'use strict';
 
-import MatcherType from '../interfaces/type-matchers-matcher';
+const MatcherType = require('../interfaces/type-matchers-matcher');
 
 /**
  * @external Minimatch
@@ -12,7 +12,7 @@ import MatcherType from '../interfaces/type-matchers-matcher';
  * @class MatchersMatcherWrapper
  * @implements MatcherType
  */
-export default class MatchersMatcherWrapper extends MatcherType {
+module.exports = class MatchersMatcherWrapper extends MatcherType {
 
 	/**
 	 * @constructor

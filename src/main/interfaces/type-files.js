@@ -1,10 +1,10 @@
-/* global */
+/* global require, module */
 'use strict';
 
 /**
  * @interface FilesType
  */
-export default class FilesType {
+module.exports = class FilesType {
 
 	/**
 	 * @function

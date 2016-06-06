@@ -1,12 +1,12 @@
-/* global */
+/* global require, module */
 'use strict';
 
-import Files from './src/main/util/wrapper-files';
-import Matchers from './src/main/util/wrapper-matchers';
-import Vodoun from './src/main/vodoun';
-import Index from './src/main/index';
-import Service from './src/main/service';
-import Scanner from './src/main/scanner';
+const Files = require('./src/main/util/wrapper-files');
+const Matchers = require('./src/main/util/wrapper-matchers');
+const Vodoun = require('./src/main/vodoun');
+const Index = require('./src/main/index');
+const Service = require('./src/main/service');
+const Scanner = require('./src/main/scanner');
 
 const matchers = new Matchers();
 
@@ -16,4 +16,4 @@ const files = new Files();
 
 const scanner = new Scanner(files, matchers);
 
-export default new Vodoun(index, scanner);
+module.exports = new Vodoun(index, scanner);

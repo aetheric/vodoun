@@ -1,10 +1,10 @@
-/* global */
+/* global require, module */
 'use strict';
 
 /**
  * @interface ScannerType
  */
-export default class ScannerType {
+module.exports = class ScannerType {
 
 	/**
 	 * This should be invoked during server startup.

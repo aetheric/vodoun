@@ -1,8 +1,8 @@
 /* global console */
 'use strict';
 
-import _ from 'underscore';
-import ServiceType from './interfaces/type-service';
+const _ = require('underscore');
+const ServiceType = require('./interfaces/type-service');
 
 /**
  * @param {Array<String>} array
@@ -19,7 +19,7 @@ function toMap(array) {
  * @class Service
  * @implements ServiceType
  */
-export default class Service extends ServiceType {
+module.exports = class Service extends ServiceType {
 
 	/**
 	 * @constructor

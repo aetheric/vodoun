@@ -1,10 +1,10 @@
-/* global */
+/* global require, module */
 'use strict';
 
 /**
  * @interface ServiceType
  */
-export default class ServiceType {
+module.exports = class ServiceType {
 
 	/**
 	 * @property
@@ -17,6 +17,8 @@ export default class ServiceType {
 	/**
 	 * @callback ServiceType.init
 	 * @this {Object<String, ?>} context
+	 * @param {Object<String, ?>} service
+	 * @param {Object<String, ?>} context
 	 * @returns {Promise|.}
 	 */
 	/**

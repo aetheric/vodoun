@@ -1,12 +1,12 @@
-/* global */
+/* global require, module */
 'use strict';
 
-import './type-service';
+require('./type-service');
 
 /**
  * @interface VodounType
  */
-export default class VodounType {
+module.exports = class VodounType {
 
 	/**
 	 * @function

@@ -11,14 +11,35 @@ traceur.require.makeDefault(function (filePath) {
 var gulp = require('gulp');
 var gulpUtil = require('gulp-util');
 var gulpMocha = require('gulp-mocha');
+var gulpJsdoc = require('gulp-jsdoc');
+var gulpRollup = require('gulp-rollup');
 var gulpIstanbul = require('gulp-istanbul');
 var gulpCoveralls = require('gulp-coveralls');
+var gulpSourcemaps = require('gulp-sourcemaps');
 var istanbulTraceur = require('istanbul-traceur');
 
-gulp.task('build', function (done) {
+var pkgInfo = require('./package.json');
 
-	gulpUtil.log('This project doesn\'t need to be compiled');
-	done();
+gulp.task('build', function () {
+
+	return gulp
+
+			.src([
+				'index.js',
+				'src/main/**/*.js'
+			], {
+				read: false
+			})
+
+			.pipe(gulpRollup({
+				sourceMap: true,
+				entry: 'index.js',
+				indent: false
+			}))
+
+			.pipe(gulpSourcemaps.write('.'))
+
+			.pipe(gulp.dest('target/dist'));
 
 });
 
@@ -81,11 +102,26 @@ gulp.task('test', function (done) {
 
 });
 
-gulp.task('docs', function (done) {
+gulp.task('docs', function () {
 
-	gulpUtil.log('This project doesn\'t have any docs to compile yet.');
-	done();
+	return gulp
 
+			.src([
+				'README.adoc',
+				'src/main/**/*.js'
+			])
+
+			.pipe(gulpJsdoc.parser({
+				name: pkgInfo.name,
+				description: pkgInfo.description,
+				version: pkgInfo.version,
+				licenses: pkgInfo.licenses,
+				plugins: [
+					//'plugins/asciidoc'
+				]
+			}))
+
+			.pipe(gulpJsdoc.generator('target/docs'));
 });
 
 gulp.task('default', [

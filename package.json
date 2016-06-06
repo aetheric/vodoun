@@ -22,6 +22,7 @@
   "homepage": "https://github.com/aetheric/vodoun#readme",
   "dependencies": {
     "minimatch": "^3.0.0",
+    "proxyquire": "^1.7.9",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
@@ -31,7 +32,10 @@
     "gulp": "^3.9.1",
     "gulp-coveralls": "^0.1.4",
     "gulp-istanbul": "^0.10.4",
+    "gulp-jsdoc": "^0.1.5",
     "gulp-mocha": "^2.2.0",
+    "gulp-rollup": "^1.8.0",
+    "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-util": "^3.0.7",
     "istanbul-traceur": "^1.0.7",
     "jshamcrest": "^0.7.0",

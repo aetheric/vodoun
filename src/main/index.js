@@ -1,15 +1,15 @@
 /* global console */
 'use strict';
 
-import _ from 'underscore';
-import IndexType from './interfaces/type-index';
-import './interfaces/type-service';
+const _ = require('underscore');
+const IndexType = require('./interfaces/type-index');
+require('./interfaces/type-service');
 
 /**
  * @class Index
  * @implements IndexType
  */
-export default class Index extends IndexType {
+module.exports = class Index extends IndexType {
 
 	/**
 	 * @constructor
@@ -82,7 +82,7 @@ export default class Index extends IndexType {
 				console.log('=> About to initialise service with frozen context.');
 
 				// Initialise the service with the frozen context.
-				const result = entry.init.call(frozenContext, service);
+				const result = entry.init.call(frozenContext, service, frozenContext);
 
 				// if a promise is returned, this will be important, otherwise it'll just execute immediately.
 				return Promise.resolve(result).then(() => {

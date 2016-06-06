@@ -1,12 +1,12 @@
-/* global */
+/* global require, module */
 'use strict';
 
-import './type-matchers-matcher';
+require('./type-matchers-matcher');
 
 /**
  * @interface MatchersType
  */
-export default class MatchersType {
+module.exports = class MatchersType {
 
 	/**
 	 * @function

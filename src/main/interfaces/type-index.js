@@ -1,12 +1,12 @@
-/* global */
+/* global require, module */
 'use strict';
 
-import './type-service';
+require('./type-service');
 
 /**
  * @interface IndexType
  */
-export default class IndexType {
+module.exports = class IndexType {
 
 	/**
 	 * @function

@@ -1,10 +1,10 @@
-/* global */
+/* global require, module */
 'use strict';
 
 /**
  * @interface StatType
  */
-export default class StatType {
+module.exports = class StatType {
 
 	/**
 	 * @function

@@ -1,11 +1,13 @@
 /* global console, require */
 'use strict';
 
-import VodounType from './interfaces/type-vodoun';
-import './interfaces/type-scanner';
-import './interfaces/type-index';
+const proxyquire = require('proxyquire');
 
-export default class Vodoun extends VodounType {
+const VodounType = require('./interfaces/type-vodoun');
+require('./interfaces/type-scanner');
+require('./interfaces/type-index');
+
+module.exports = class Vodoun extends VodounType {
 
 	/**
 	 * @constructor
@@ -31,7 +33,9 @@ export default class Vodoun extends VodounType {
 
 			[glob]: (fileMatch) => {
 				// services should add themselves to the index.
-				const module = require(fileMatch);
+				const module = proxyquire(fileMatch, {
+					vodoun: this
+				});
 			}
 
 		});

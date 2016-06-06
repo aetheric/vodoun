@@ -1,12 +1,12 @@
 /* global console */
 'use strict';
 
-import _ from 'underscore';
-import paths from 'path';
-import ScannerType from './interfaces/type-scanner';
-import './interfaces/type-files-stat';
-import './interfaces/type-matchers';
-import './interfaces/type-files';
+const _ = require('underscore');
+const paths = require('path');
+const ScannerType = require('./interfaces/type-scanner');
+require('./interfaces/type-files-stat');
+require('./interfaces/type-matchers');
+require('./interfaces/type-files');
 
 /**
  * @template Key, Value, NewKey, Context
@@ -66,7 +66,7 @@ function MatchReducer(path) {
  * @class Scanner
  * @implements ScannerType
  */
-export default class Scanner extends ScannerType {
+module.exports = class Scanner extends ScannerType {
 
 	/**
 	 * @constructor
