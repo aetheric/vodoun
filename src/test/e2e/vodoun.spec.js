@@ -1,7 +1,7 @@
 /* global describe, it, before, beforeEach, afterEach, after */
 'use strict';
 
-import { mockVodoun, testDir, expect } from './_setup';
+import { mockVodoun, testDir, expect } from 'src/test/e2e/_setup';
 
 describe('The vodoun system', () => {
 

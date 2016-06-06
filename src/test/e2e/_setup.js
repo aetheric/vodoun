@@ -8,15 +8,15 @@ import mockRequire from 'mock-require';
 import * as fs from 'fs-extra-promise-es6';
 
 import DeferredPromise from '../DeferredPromise';
-import Files from '../../main/util/wrapper-files';
-import Matchers from '../../main/util/wrapper-matchers';
-import Vodoun from '../../main/vodoun';
-import Index from '../../main/index';
-import Service from '../../main/service';
-import Scanner from '../../main/scanner';
+import Files from 'src/main/util/wrapper-files';
+import Matchers from 'src/main/util/wrapper-matchers';
+import Vodoun from 'src/main/vodoun';
+import Index from 'src/main/index';
+import Service from 'src/main/service';
+import Scanner from 'src/main/scanner';
 
 export const expect = chai.expect;
-export const testDir = path.resolve('../../../target/testing/e2e');
+export const testDir = path.resolve('target/testing/e2e');
 export let mockVodoun = new DeferredPromise();
 
 before(() => {
