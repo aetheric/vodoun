@@ -42,7 +42,7 @@ describe('The Index class', () => {
 
 		const result = index.register(serviceName, dependencies, init);
 
-		expect(result).to.be.undefined;
+		expect(result).to.be.a(Service);
 
 		mockito.verify(mockServiceTypeConstructor, verifiers.once())(serviceName, dependencies, init);
 

@@ -38,7 +38,19 @@ describe('The Vodoun class', () => {
 
 	beforeEach(() => {
 
-		mockIndex = mockito.mock(() => {});
+		mockIndex = mockito.mock(function () {
+
+			this.register = () => {
+				console.error('Unstubbed Index#register called!');
+				return Promise.reject(new Error('unstubbed'));
+			};
+
+			this.resolve = () => {
+				console.error('Unstubbed Index#resolve called!');
+				return Promise.reject(new Error('unstubbed'));
+			};
+
+		});
 
 		mockIndexConstructor = mockito.mockFunction('Index#constructor', () => {
 			console.log('Index#constructor called!');
@@ -142,7 +154,7 @@ describe('The Vodoun class', () => {
 
 		});
 
-		it('that when called before the index is initialised, sets up the index', () => {
+		it('that when called for the first time, works fine.', () => {
 
 			scanBase = '.';
 			glob = '**';
@@ -151,21 +163,14 @@ describe('The Vodoun class', () => {
 
 			return expect(result).to.eventually.be.fulfilled.then(() => {
 
-				mockito.verify(mockFilesConstructor, Verifiers.never())();
-				mockito.verify(mockMatchConstructor, Verifiers.never())();
-				mockito.verify(mockServiceConstructor, Verifiers.never())();
-
-				mockito.verify(mockIndexConstructor, Verifiers.once())();
-				mockito.verify(mockScannerConstructor, Verifiers.once())(mockFilesConstructor, mockMatchConstructor);
-
 				mockito.verify(mockScanner, Verifiers.once()).scan(scanBase, matchActionsCaptor);
-				expect(matchActionsCaptor[glob]).to.be.a('function');
+				expect(matchActionsCaptor.value[glob]).to.be.a('function');
 
 			});
 
 		});
 
-		it('that when called after the index is initialised, throws an error', () => {
+		it('that when called for the second time, works fine as well', () => {
 
 			scanBase = '.';
 			glob = '**';
@@ -174,17 +179,10 @@ describe('The Vodoun class', () => {
 			return expect(firstScan).to.eventually.be.fulfilled.then(() => {
 
 				const secondScan = vodoun.scan(scanBase, glob);
-				return expect(secondScan).to.be.rejectedWith(Error).then(() => {
+				return expect(secondScan).to.eventually.be.fulfilled.then(() => {
 
-					mockito.verify(mockFilesConstructor, Verifiers.never())();
-					mockito.verify(mockMatchConstructor, Verifiers.never())();
-					mockito.verify(mockServiceConstructor, Verifiers.never())();
-
-					mockito.verify(mockIndexConstructor, Verifiers.once())();
-					mockito.verify(mockScannerConstructor, Verifiers.once())(mockFilesConstructor, mockMatchConstructor);
-
-					mockito.verify(mockScanner, Verifiers.once()).scan(scanBase, matchActionsCaptor);
-					expect(matchActionsCaptor[glob]).to.be.a('function');
+					mockito.verify(mockScanner, Verifiers.times(2)).scan(scanBase, matchActionsCaptor);
+					expect(matchActionsCaptor.value[glob]).to.be.a('function');
 
 				});
 
@@ -192,31 +190,26 @@ describe('The Vodoun class', () => {
 
 		});
 
-
-
 	});
 
 	describe('has a function called \'register\'.', () => {
 
-		let name;
-		let dependencies;
-		let init;
-
 		beforeEach(() => {
 			expect(vodoun.register).to.be.a('function');
+			mockito.when(mockIndex).register(Matchers.string(), Matchers.anything(), Matchers.func()).then(() => mockService);
+			mockito.when(mockIndex).register(Matchers.string(), Matchers.func()).then(() => mockService);
 		});
 
-		it('that when called with no parameters, throws an error', () => {
-
-			name = undefined;
-			dependencies = undefined;
-			init = undefined;
-
-			const result = vodoun.register(name, dependencies, init);
-
-			return expect(result).to.be.rejectedWith(Error);
-
+		it('that when called with bad parameters, throws an error', () => {
+			expect(() => vodoun.register()).to.throw(Error);
+			expect(() => vodoun.register(undefined, [], () => {})).to.throw(Error);
+			expect(() => vodoun.register(undefined, [], () => {})).to.throw(Error);
 		});
+
+		it('that when called with good parameters, returns a service.', () => {
+			expect(() => vodoun.register('service', [], () => {})).to.equal(mockService);
+			expect(() => vodoun.register('service', () => {})).to.equal(mockService);
+		})
 
 	});
 

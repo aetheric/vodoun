@@ -26,7 +26,8 @@ module.exports = class Index {
 	 * @function
 	 * @param {String} name
 	 * @param {Array<String>|Object<String, String>} dependencies
-	 * @param {ServiceType#init} init
+	 * @param {Service#init} init
+	 * @return {Service}
 	 */
 	register(name, dependencies, init) {
 
@@ -34,9 +35,12 @@ module.exports = class Index {
 			console.warn(`Overriding service ${name}...`);
 		}
 
-		this._index[name] = new this.Service(name, dependencies, init);
+		const service = new this.Service(name, dependencies, init);
+		this._index[name] = service;
 
 		console.log(`Registered ${name}.`);
+
+		return service;
 
 	};
 

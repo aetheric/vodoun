@@ -7,8 +7,8 @@ module.exports = class Vodoun {
 
 	/**
 	 * @constructor
-	 * @param {IndexType} index
-	 * @param {ScannerType} scanner
+	 * @param {Index} index
+	 * @param {Scanner} scanner
 	 */
 	constructor(index, scanner) {
 
@@ -46,15 +46,20 @@ module.exports = class Vodoun {
 	 * @function
 	 * @param {String} name
 	 * @param {Array<String>|Object<String, String>} dependencies
-	 * @param {ServiceType.init} init
+	 * @param {Service#init} init
+	 * @return {Service}
 	 */
-	register(name, dependencies, init) {
+	register(name, dependencies = [], init) {
 
-		if (this._index[name]) {
-			throw new Error("Service called ${name} already added to index.")
+		if (!name) {
+			throw new Error('A service name is required.');
 		}
 
-		this._index.register(name, dependencies, init);
+		if (!init) {
+			throw new Error('A service must have a constructor.');
+		}
+
+		return this._index.register(name, dependencies, init);
 
 	};
 

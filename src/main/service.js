@@ -16,7 +16,6 @@ function toMap(array) {
 
 /**
  * @class Service
- * @implements ServiceType
  */
 module.exports = class Service {
 
@@ -24,7 +23,7 @@ module.exports = class Service {
 	 * @constructor
 	 * @param {String} name
 	 * @param {Array<String>|Object<String, String>} dependencies
-	 * @param {ServiceType.init} init
+	 * @param {Service#init} init
 	 */
 	constructor(name, dependencies, init) {
 
@@ -45,7 +44,7 @@ module.exports = class Service {
 	}
 
 	/**
-	 * @callback ServiceType.init
+	 * @callback ServiceType#init
 	 * @this {Object<String, ?>} context
 	 * @param {Object<String, ?>} service
 	 * @param {Object<String, ?>} context
@@ -53,7 +52,7 @@ module.exports = class Service {
 	 */
 	/**
 	 * @property
-	 * @returns {ServiceType.init}
+	 * @returns {Service#init}
 	 */
 	get init() {
 		return this._init;
