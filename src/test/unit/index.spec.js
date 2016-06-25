@@ -1,13 +1,13 @@
 /* global describe, it, beforeEach, afterEach, console */
 'use strict';
 
-import chai from 'chai';
-import Mockito from 'jsmockito';
-import Hamcrest from 'jshamcrest';
-import ArgumentCaptor from '../ArgumentCaptor';
-import Index from '../../main/index';
-import ServiceType from '../../main/interfaces/type-service';
-import './_setup';
+const chai = require('chai');
+const Mockito = require('jsmockito');
+const Hamcrest = require('jshamcrest');
+const ArgumentCaptor = require('../ArgumentCaptor');
+const Index = require('../../main/index');
+const Service = require('../../main/service');
+require('./_setup');
 
 const expect = chai.expect;
 const mockito = Mockito.JsMockito;
@@ -22,7 +22,7 @@ describe('The Index class', () => {
 
 	beforeEach(() => {
 
-		mockServiceTypeConstructor = mockito.mockFunction(ServiceType, () => {
+		mockServiceTypeConstructor = mockito.mockFunction(Service, () => {
 			console.info('ServiceType#constructor called!');
 		});
 
@@ -48,7 +48,7 @@ describe('The Index class', () => {
 
 	});
 
-	it.skip('should override the previous registration if a service is added twice', () => {
+	it('should override the previous registration if a service is added twice', () => {
 
 		const serviceName = 'service';
 		const initA = () => { };
@@ -65,7 +65,7 @@ describe('The Index class', () => {
 
 	});
 
-	it.skip('should retrieve a known service without problems', () => {
+	it('should retrieve a known service without problems', () => {
 
 		const serviceName = 'service';
 		const init = (context) => {
@@ -104,7 +104,7 @@ describe('The Index class', () => {
 
 	});
 
-	it.skip('should resolve dependencies registered in any order', () => {
+	it('should resolve dependencies registered in any order', () => {
 
 		const serviceNameA = 'service';
 		const serviceNameB = 'otherservice';

@@ -2,21 +2,18 @@
 'use strict';
 
 const _ = require('underscore');
-const IndexType = require('./interfaces/type-index');
-require('./interfaces/type-service');
 
 /**
  * @class Index
  * @implements IndexType
  */
-module.exports = class Index extends IndexType {
+module.exports = class Index {
 
 	/**
 	 * @constructor
 	 * @param {ServiceType} Service
 	 */
 	constructor(Service) {
-		super();
 
 		this.Service = Service;
 
@@ -25,7 +22,12 @@ module.exports = class Index extends IndexType {
 
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @function
+	 * @param {String} name
+	 * @param {Array<String>|Object<String, String>} dependencies
+	 * @param {ServiceType#init} init
+	 */
 	register(name, dependencies, init) {
 
 		if (this._index[name]) {
@@ -38,7 +40,12 @@ module.exports = class Index extends IndexType {
 
 	};
 
-	/** @inheritDoc */
+	/**
+	 * @function
+	 * @param {String} name The registered name of the service to resolve.
+	 * @param {Array<String>} [history] Used to detect cyclical dependencies during recursion.
+	 * @returns {Promise<Object<String, ?>>}
+	 */
 	resolve(name, history = []) {
 		return new Promise((resolve, reject) => {
 
@@ -106,4 +113,4 @@ module.exports = class Index extends IndexType {
 
 	}
 
-}
+};

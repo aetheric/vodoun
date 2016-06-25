@@ -2,7 +2,6 @@
 'use strict';
 
 const _ = require('underscore');
-const ServiceType = require('./interfaces/type-service');
 
 /**
  * @param {Array<String>} array
@@ -19,7 +18,7 @@ function toMap(array) {
  * @class Service
  * @implements ServiceType
  */
-module.exports = class Service extends ServiceType {
+module.exports = class Service {
 
 	/**
 	 * @constructor
@@ -28,7 +27,6 @@ module.exports = class Service extends ServiceType {
 	 * @param {ServiceType.init} init
 	 */
 	constructor(name, dependencies, init) {
-		super();
 
 		this._name = name;
 		this._init = init;
@@ -38,19 +36,35 @@ module.exports = class Service extends ServiceType {
 
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @property
+	 * @returns {String}
+	 */
 	get name() {
 		return this._name;
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @callback ServiceType.init
+	 * @this {Object<String, ?>} context
+	 * @param {Object<String, ?>} service
+	 * @param {Object<String, ?>} context
+	 * @returns {Promise|.}
+	 */
+	/**
+	 * @property
+	 * @returns {ServiceType.init}
+	 */
 	get init() {
 		return this._init;
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @property
+	 * @returns {Object<String, String>}
+	 */
 	get dependencies() {
 		return this._dependencies;
 	}
 
-}
+};

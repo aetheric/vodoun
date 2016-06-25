@@ -1,16 +1,16 @@
 /* global describe, beforeEach, it */
 'use strict';
 
-import files from 'fs';
-import chai from 'chai';
-import Mockito from 'jsmockito';
-import Hamcrest from 'jshamcrest';
+const files = require('fs');
+const chai = require('chai');
+const Mockito = require('jsmockito');
+const Hamcrest = require('jshamcrest');
 
-import ArgumentCaptor from '../ArgumentCaptor';
-import Scanner from '../../main/scanner';
-import FilesType from '../../main/interfaces/type-files';
-import MatchersType from '../../main/interfaces/type-matchers';
-import './_setup';
+const ArgumentCaptor = require('../ArgumentCaptor');
+const Scanner = require('../../main/scanner');
+const FilesWrapper = require('../../main/util/wrapper-files');
+const MatchersWrapper = require('../../main/util/wrapper-matchers');
+require('./_setup');
 
 const expect = chai.expect;
 const mockito = Mockito.JsMockito;
@@ -26,10 +26,10 @@ describe('The Scanner class', () => {
 		const error = new Error('expected');
 
 		/** @type FilesType */
-		const filesMock = mockito.mock(FilesType);
+		const filesMock = mockito.mock(FilesWrapper);
 
 		/** @type MatchersType */
-		const matchersMock = mockito.mock(MatchersType);
+		const matchersMock = mockito.mock(MatchersWrapper);
 
 		const pathCaptor = new ArgumentCaptor(matchers.string());
 		const callbackCaptor = new ArgumentCaptor(matchers.func());

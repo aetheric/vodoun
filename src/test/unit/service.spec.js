@@ -1,10 +1,10 @@
 /* global describe, beforeEach, before, it */
 'use strict';
 
-import chai from 'chai';
+const chai = require('chai');
 
-import Service from '../../main/service';
-import './_setup';
+const Service = require('../../main/service');
+require('./_setup');
 
 const expect = chai.expect;
 

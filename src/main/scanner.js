@@ -2,11 +2,15 @@
 'use strict';
 
 const _ = require('underscore');
+
+/**
+ * @external PathLib
+ * @see path
+ */
+/**
+ * @type PathLib
+ */
 const paths = require('path');
-const ScannerType = require('./interfaces/type-scanner');
-require('./interfaces/type-files-stat');
-require('./interfaces/type-matchers');
-require('./interfaces/type-files');
 
 /**
  * @template Key, Value, NewKey, Context
@@ -66,7 +70,7 @@ function MatchReducer(path) {
  * @class Scanner
  * @implements ScannerType
  */
-module.exports = class Scanner extends ScannerType {
+module.exports = class Scanner {
 
 	/**
 	 * @constructor
@@ -74,14 +78,20 @@ module.exports = class Scanner extends ScannerType {
 	 * @param {MatchersType} matcher
 	 */
 	constructor(files, matcher) {
-		super();
 
 		this._files = files;
 		this._matcher = matcher;
 
 	}
 
-	/** @inheritDoc */
+	/**
+	 * This should be invoked during server startup.
+	 *
+	 * @function
+	 * @param {String} path
+	 * @param {Map<String, Function|Object<String, Function|MatcherType>>} matchActions
+	 * @return {Promise<Array<String>>}
+	 */
 	scan(path, matchActions) {
 
 		if (!path) {
@@ -143,4 +153,4 @@ module.exports = class Scanner extends ScannerType {
 
 	}
 
-}
+};

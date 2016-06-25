@@ -1,14 +1,14 @@
 /* global describe, beforeEach, afterEach, it */
 'use strict';
 
-import _ from 'underscore';
-import chai from 'chai';
-import Mockito from 'jsmockito';
-import Hamcrest from 'jshamcrest';
+const _ = require('underscore');
+const chai = require('chai');
+const Mockito = require('jsmockito');
+const Hamcrest = require('jshamcrest');
 
-import ArgumentCaptor from '../ArgumentCaptor';
-import Vodoun from '../../main/vodoun';
-import './_setup';
+const ArgumentCaptor = require('../ArgumentCaptor');
+const Vodoun = require('../../main/vodoun');
+require('./_setup');
 
 global.JsHamcrest = Hamcrest.JsHamcrest;
 
@@ -142,7 +142,7 @@ describe('The Vodoun class', () => {
 
 		});
 
-		it.skip('that when called before the index is initialised, sets up the index', () => {
+		it('that when called before the index is initialised, sets up the index', () => {
 
 			scanBase = '.';
 			glob = '**';
@@ -165,7 +165,7 @@ describe('The Vodoun class', () => {
 
 		});
 
-		it.skip('that when called after the index is initialised, throws an error', () => {
+		it('that when called after the index is initialised, throws an error', () => {
 
 			scanBase = '.';
 			glob = '**';
@@ -206,7 +206,7 @@ describe('The Vodoun class', () => {
 			expect(vodoun.register).to.be.a('function');
 		});
 
-		it.skip('that when called with no parameters, throws an error', () => {
+		it('that when called with no parameters, throws an error', () => {
 
 			name = undefined;
 			dependencies = undefined;
@@ -238,7 +238,7 @@ describe('The Vodoun class', () => {
 
 		});
 
-		it.skip('that when called before the index is initialised, throws an error.', () => {
+		it('that when called before the index is initialised, throws an error.', () => {
 
 			serviceName = 'serviceName';
 
@@ -248,7 +248,7 @@ describe('The Vodoun class', () => {
 
 		});
 
-		it.skip('that when called after the index is initialised, passes the call to the index.', () => {
+		it('that when called after the index is initialised, passes the call to the index.', () => {
 
 			serviceName = 'serviceName';
 

@@ -3,11 +3,7 @@
 
 const proxyquire = require('proxyquire');
 
-const VodounType = require('./interfaces/type-vodoun');
-require('./interfaces/type-scanner');
-require('./interfaces/type-index');
-
-module.exports = class Vodoun extends VodounType {
+module.exports = class Vodoun {
 
 	/**
 	 * @constructor
@@ -15,14 +11,18 @@ module.exports = class Vodoun extends VodounType {
 	 * @param {ScannerType} scanner
 	 */
 	constructor(index, scanner) {
-		super();
 
 		this._index = index;
 		this._scanner = scanner;
 
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @function
+	 * @param {String} scanBase Where to start recursively scanning from.
+	 * @param {String} [glob] The glob pattern to match against.
+	 * @return {Promise}
+	 */
 	scan(scanBase, glob = '**/*.js') {
 
 		if (!scanBase) {
@@ -42,7 +42,12 @@ module.exports = class Vodoun extends VodounType {
 
 	};
 
-	/** @inheritDoc */
+	/**
+	 * @function
+	 * @param {String} name
+	 * @param {Array<String>|Object<String, String>} dependencies
+	 * @param {ServiceType.init} init
+	 */
 	register(name, dependencies, init) {
 
 		if (this._index[name]) {
@@ -53,7 +58,11 @@ module.exports = class Vodoun extends VodounType {
 
 	};
 
-	/** @inheritDoc */
+	/**
+	 * @function
+	 * @param {String} serviceName
+	 * @return {Promise<Object<String, ?>>}
+	 */
 	resolve(serviceName) {
 
 		if (!serviceName) {

@@ -16,23 +16,20 @@
  * @param {Function} callback
  */
 /**
- * @type FilesLib
+ * @type {FilesLib}
  */
 const files = require('fs');
-
-const FilesType = require('../interfaces/type-files');
 
 /**
  * @class FilesWrapper
  * @implements FilesType
  */
-module.exports = class FilesWrapper extends FilesType {
+module.exports = class FilesWrapper {
 
 	/**
 	 * @constructor
 	 */
 	constructor() {
-		super();
 
 		this._stat = (path) => new Promise((resolve, reject) => {
 			files.stat(path, (error, stat) => {
@@ -61,14 +58,33 @@ module.exports = class FilesWrapper extends FilesType {
 
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @typedef StatType
+	 */
+	/**
+	 * @function StatType#isFile
+	 * @returns {Boolean}
+	 */
+	/**
+	 * @function StatType#isDirectory
+	 * @returns {Boolean}
+	 */
+	/**
+	 * @function
+	 * @param {String} path
+	 * @returns {Promise<StatType>}
+	 */
 	stat(path) {
 		return this._stat(path);
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @function
+	 * @param {String} path
+	 * @returns {Promise<Array<String>>}
+	 */
 	readdir(path) {
 		return this._readdir(path);
 	}
 
-}
+};

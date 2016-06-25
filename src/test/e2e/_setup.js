@@ -1,19 +1,19 @@
 /* global beforeEach */
 'use strict';
 
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-import path from 'path';
-import mockRequire from 'mock-require';
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const path = require('path');
+const mockRequire = require('mock-require');
 import * as fs from 'fs-extra-promise-es6';
 
-import DeferredPromise from '../DeferredPromise';
-import Files from 'src/main/util/wrapper-files';
-import Matchers from 'src/main/util/wrapper-matchers';
-import Vodoun from 'src/main/vodoun';
-import Index from 'src/main/index';
-import Service from 'src/main/service';
-import Scanner from 'src/main/scanner';
+const DeferredPromise = require('../DeferredPromise');
+const Files = require('src/main/util/wrapper-files');
+const Matchers = require('src/main/util/wrapper-matchers');
+const Vodoun = require('src/main/vodoun');
+const Index = require('src/main/index');
+const Service = require('src/main/service');
+const Scanner = require('src/main/scanner');
 
 export const expect = chai.expect;
 export const testDir = path.resolve('target/testing/e2e');
