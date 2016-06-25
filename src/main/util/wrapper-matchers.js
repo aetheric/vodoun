@@ -19,7 +19,6 @@ const Minimatch = minimatch.Minimatch;
 
 /**
  * @class MatchersWrapper
- * @implements MatchersType
  */
 module.exports = class MatchersWrapper {
 
@@ -32,7 +31,7 @@ module.exports = class MatchersWrapper {
 	/**
 	 * @function
 	 * @param {String} pattern
-	 * @returns {MatcherType}
+	 * @returns {MatchersMatcherWrapper}
 	 */
 	matcher(pattern) {
 		const matcher = new Minimatch(pattern);

@@ -32,17 +32,15 @@
     "gulp": "^3.9.1",
     "gulp-coveralls": "^0.1.4",
     "gulp-istanbul": "^0.10.4",
-    "gulp-jsdoc": "^0.1.5",
+    "gulp-jsdoc3": "^0.3.0",
     "gulp-mocha": "^2.2.0",
     "gulp-rollup": "^1.8.0",
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-util": "^3.0.7",
-    "istanbul-traceur": "^1.0.7",
+    "istanbul": "^0.4.4",
     "jshamcrest": "^0.7.0",
     "jsmockito": "github:neben/jsmockito",
-    "mocha-traceur": "^2.1.0",
     "mock-require": "^1.2.1",
-    "traceur": "0.0.107",
-    "traceur-source-maps": "^1.0.6"
+    "rollup-plugin-typescript": "^0.7.6"
   }
 }

@@ -5,19 +5,21 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const path = require('path');
 const mockRequire = require('mock-require');
-import * as fs from 'fs-extra-promise-es6';
+const fs = require('fs-extra-promise-es6');
 
 const DeferredPromise = require('../DeferredPromise');
-const Files = require('src/main/util/wrapper-files');
-const Matchers = require('src/main/util/wrapper-matchers');
-const Vodoun = require('src/main/vodoun');
-const Index = require('src/main/index');
-const Service = require('src/main/service');
-const Scanner = require('src/main/scanner');
+const Files = require('../../main/util/wrapper-files');
+const Matchers = require('../../main/util/wrapper-matchers');
+const Vodoun = require('../../main/vodoun');
+const Index = require('../../main/index');
+const Service = require('../../main/service');
+const Scanner = require('../../main/scanner');
 
-export const expect = chai.expect;
-export const testDir = path.resolve('target/testing/e2e');
-export let mockVodoun = new DeferredPromise();
+const out = module.exports = {
+	expect: chai.expect,
+	testDir: path.resolve('target/testing/e2e'),
+	mockVodoun: new DeferredPromise()
+};
 
 before(() => {
 	chai.use(chaiAsPromised);
@@ -39,10 +41,10 @@ beforeEach(() => {
 		});
 
 	}).then(() => {
-		return mockVodoun.resolve(vodoun);
+		return out.mockVodoun.resolve(vodoun);
 
 	}).catch((error) => {
-		mockVodoun.reject(error);
+		out.mockVodoun.reject(error);
 		throw error;
 	});
 

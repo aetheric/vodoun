@@ -1,26 +1,19 @@
 /* global require */
 'use strict';
 
-var traceur = require('traceur');
+const gulp = require('gulp');
+const gulpUtil = require('gulp-util');
+const gulpMocha = require('gulp-mocha');
+const gulpJsdoc = require('gulp-jsdoc3');
+const gulpRollup = require('gulp-rollup');
+const gulpIstanbul = require('gulp-istanbul');
+const gulpCoveralls = require('gulp-coveralls');
+const gulpSourcemaps = require('gulp-sourcemaps');
+const rollupPluginTypescript = require('rollup-plugin-typescript');
 
-require('traceur-source-maps').install(traceur);
-traceur.require.makeDefault(function (filePath) {
-	return !~filePath.indexOf('node_modules');
-});
+const pkgInfo = require('./package.json');
 
-var gulp = require('gulp');
-var gulpUtil = require('gulp-util');
-var gulpMocha = require('gulp-mocha');
-var gulpJsdoc = require('gulp-jsdoc');
-var gulpRollup = require('gulp-rollup');
-var gulpIstanbul = require('gulp-istanbul');
-var gulpCoveralls = require('gulp-coveralls');
-var gulpSourcemaps = require('gulp-sourcemaps');
-var istanbulTraceur = require('istanbul-traceur');
-
-var pkgInfo = require('./package.json');
-
-gulp.task('build', function () {
+gulp.task('build', () => {
 
 	return gulp
 
@@ -34,7 +27,10 @@ gulp.task('build', function () {
 			.pipe(gulpRollup({
 				sourceMap: true,
 				entry: 'index.js',
-				indent: false
+				indent: false,
+				plugins: [
+					rollupPluginTypescript()
+				]
 			}))
 
 			.pipe(gulpSourcemaps.write('.'))
@@ -43,85 +39,84 @@ gulp.task('build', function () {
 
 });
 
-gulp.task('test', function (done) {
+gulp.task('test', (done) => gulp
 
-	gulp.src('src/main/**/*.js')
+		.src('src/main/**/*.js')
 
-			// Covering files
-			.pipe(gulpIstanbul({
-				instrumenter: istanbulTraceur.Instrumenter
-			}))
+		// Covering files
+		.pipe(gulpIstanbul())
 
-			// Force `require` to return covered files
-			.pipe(gulpIstanbul.hookRequire())
+		// Force `require` to return covered files
+		.pipe(gulpIstanbul.hookRequire())
 
-			.on('finish', function () {
+		.on('finish', () => gulp
 
-				gulp.src('src/test/**/*.spec.js')
+				.src('src/test/**/*.spec.js')
 
-						.pipe(gulpMocha({
-							ui: 'bdd',
-							reporter: 'spec',
-							bail: false,
-							compilers: {
-								js: 'mocha-traceur'
-							}
-						}))
+				.pipe(gulpMocha({
+					ui: 'bdd',
+					reporter: 'spec',
+					bail: false
+				}))
 
-						.on('error', function (error) {
-							gulpUtil.log(error);
-						})
+				.on('error', function (error) {
+					gulpUtil.log(error);
+				})
 
-						.pipe(gulp.dest('target/testing'))
+				.pipe(gulp.dest('target/testing'))
 
-						.pipe(gulpIstanbul.writeReports({
-							dir: 'target/coverage',
-							reporters: [
-								'cobertura',
-								'lcov'
-							]
-						}))
+				.pipe(gulpIstanbul.writeReports({
+					dir: 'target/coverage',
+					reporters: [
+						'cobertura',
+						'lcov'
+					]
+				}))
 
-						.once('end', function (error) {
+				.once('end', (error) => {
 
-							error && done(error);
+					error && done(error);
 
-							gulp.src('target/coverage/**/lcov.info')
+					gulp.src('target/coverage/**/lcov.info')
 
-									.pipe(gulpCoveralls())
+							.pipe(gulpCoveralls())
 
-									.once('end', function (error) {
+							.once('end', function (error) {
 
-										done(error);
+								done(error);
 
-									});
+							});
 
-						});
+				})
 
-			});
+		)
 
-});
+);
 
-gulp.task('docs', function () {
+gulp.task('docs', (done) => {
 
-	return gulp
+	gulp
 
 			.src([
 				'README.adoc',
 				'src/main/**/*.js'
-			])
+			], {
+				read: false
+			})
 
-			.pipe(gulpJsdoc.parser({
+			.pipe(gulpJsdoc({
 				name: pkgInfo.name,
 				description: pkgInfo.description,
 				version: pkgInfo.version,
 				licenses: pkgInfo.licenses,
+				opts: {
+					destination: 'target/docs'
+				},
 				plugins: [
 					//'plugins/asciidoc'
 				]
-			}))
+			}, done));
 
-			.pipe(gulpJsdoc.generator('target/docs'));
 });
 
 gulp.task('default', [

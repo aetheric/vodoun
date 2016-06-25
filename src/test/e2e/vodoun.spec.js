@@ -1,26 +1,26 @@
 /* global describe, it, before, beforeEach, afterEach, after */
 'use strict';
 
-import { mockVodoun, testDir, expect } from 'src/test/e2e/_setup';
+const setup = require('./_setup');
 
 describe('The vodoun system', () => {
 
 	let vodoun = null;
 
 	beforeEach(() => {
-		return mockVodoun.then((instance) => {
+		return setup.mockVodoun.then((instance) => {
 			vodoun = instance;
 		});
 	});
 
 	it('will successfully scan the nominated path', () => {
-		return vodoun.scan(testDir);
+		return vodoun.scan(setup.testDir);
 	});
 
 	describe('once the path is scanned', () => {
 
 		beforeEach(() => {
-			return vodoun.scan(testDir);
+			return vodoun.scan(setup.testDir);
 		});
 
 		it('will resolve dependencies as neccesary', () => {

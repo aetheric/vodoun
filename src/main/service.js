@@ -16,6 +16,9 @@ function toMap(array) {
 
 /**
  * @class Service
+ * @property {String}                 name         - The service name.
+ * @property {Service#init}           init         - The service constructor.
+ * @property {Object<String, String>} dependencies - The service dependencies.
  */
 module.exports = class Service {
 
@@ -36,7 +39,6 @@ module.exports = class Service {
 	}
 
 	/**
-	 * @property
 	 * @returns {String}
 	 */
 	get name() {
@@ -48,10 +50,9 @@ module.exports = class Service {
 	 * @this {Object<String, ?>} context
 	 * @param {Object<String, ?>} service
 	 * @param {Object<String, ?>} context
-	 * @returns {Promise|.}
+	 * @returns {Promise|undefined}
 	 */
 	/**
-	 * @property
 	 * @returns {Service#init}
 	 */
 	get init() {
@@ -59,7 +60,6 @@ module.exports = class Service {
 	}
 
 	/**
-	 * @property
 	 * @returns {Object<String, String>}
 	 */
 	get dependencies() {
